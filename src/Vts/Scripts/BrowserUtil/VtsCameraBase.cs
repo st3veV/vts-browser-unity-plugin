@@ -231,7 +231,7 @@ public abstract class VtsCameraBase : MonoBehaviour
     public VtsDataControl controlNearFar;
 
 #pragma warning disable
-    [SerializeField, TextArea] private string Config = "{ \"traverseModeSurfaces\":\"balanced\", \"traverseModeGeodata\":\"none\", \"lodBlending\":0 }";
+    [SerializeField, TextArea] private string Config = "{ \"traverseModeSurfaces\":\"balanced\", \"traverseModeGeodata\":\"stable\", \"lodBlending\":0 }";
     [SerializeField, TextArea(0, 20)] private string Statistics = "This will show statistics at play";
 #pragma warning restore
 

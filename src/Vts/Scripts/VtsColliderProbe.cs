@@ -61,7 +61,7 @@ public class VtsColliderProbe : MonoBehaviour
         // enforce fixed traversal mode
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("{ \"fixedTraversalDistance\":").Append(collidersDistance).Append(", \"fixedTraversalLod\":").Append(collidersLod).Append(", \"traverseModeSurfaces\":\"fixed\", \"traverseModeGeodata\":\"none\" }");
+            builder.Append("{ \"fixedTraversalDistance\":").Append(collidersDistance).Append(", \"fixedTraversalLod\":").Append(collidersLod).Append(", \"traverseModeSurfaces\":\"fixed\" }");
             vcam.SetOptions(builder.ToString());
         }
 

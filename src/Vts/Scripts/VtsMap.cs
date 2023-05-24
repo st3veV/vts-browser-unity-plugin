@@ -43,6 +43,7 @@ public class VtsMap : MonoBehaviour
         map = new Map(CreateConfig);
         map.EventLoadTexture += VtsResources.LoadTexture;
         map.EventLoadMesh += VtsResources.LoadMesh;
+        map.EventLoadGeodata += VtsResources.LoadGeodata;
         dataThread = new Thread(new ThreadStart(DataEntry));
         dataThread.Start();
     }

@@ -45,6 +45,11 @@ public static class VtsResources
         return new VtsMesh(m);
     }
 
+    public static System.Object LoadGeodata(vts.Geodata g)
+    {
+        return new VtsGeodataTile(g);
+    }
+
     public static void Init()
     {
         lock (resourcesToDestroy)
@@ -355,4 +360,95 @@ public class VtsMesh : IDisposable
     private MeshTopology topology;
     private UnityEngine.Mesh um;
     public readonly string id;
+}
+
+// class that represents single geodata object within a tile
+public class VtsGeodataObject : IDisposable, IComparable<VtsGeodataObject>
+{
+
+    public VtsGeodataObject(Point3D[] positions, Dictionary<string,string> properties, VtsGeodataTile tile)
+    {
+        //this.text = text;
+        this.positions = positions;
+        this.properties = properties;
+        this.tile = tile;
+        if(properties.ContainsKey("id"))
+            id = properties["id"];
+    }
+
+    public void Dispose()
+    {
+    }
+
+    public int CompareTo(VtsGeodataObject other)
+    {
+        return id.CompareTo(other.id);
+    }
+
+    public readonly string id;
+
+    public readonly string text;
+    public readonly Point3D[] positions;
+    public readonly Dictionary<string,string> properties;
+
+    public readonly VtsGeodataTile tile;
+
+}
+
+// class that represents single geodata tile provided by the vts
+public class VtsGeodataTile : IDisposable
+{
+    public VtsGeodataTile(vts.Geodata g)
+    {
+        id = g.id;
+        type = g.type;
+        texts = g.texts;
+        model = g.model;
+        positions = g.positions;
+        properties = g.properties;
+        vg = g;
+    }
+
+    public VtsGeodataObject[] GetObjects()
+    {
+        if (objects == null)
+        {
+            if(positions.Length == 0 || properties.Length != positions.Length){
+                objects = new VtsGeodataObject[0];
+                return objects;
+            }
+            
+            objects = new VtsGeodataObject[properties.Length];
+            for (int i = 0; i < properties.Length; i++)
+            {
+                objects[i] = new VtsGeodataObject(
+                    vg.positions[i],
+                    vg.properties[i],
+                    this
+                );
+            }
+        }
+        return objects;
+    }
+
+    public void Dispose()
+    {
+        if (objects != null)
+        {
+            foreach (var o in objects)
+                o.Dispose();
+            objects = null;
+        }
+    }
+
+    private VtsGeodataObject[] objects;
+
+    public readonly string id;
+    public readonly vts.GeodataType type;
+    public readonly string[] texts;
+    public readonly double[] model;
+    public readonly Point3D[][] positions;
+
+    public readonly Dictionary<string,string>[] properties;
+    private vts.Geodata vg;
 }
